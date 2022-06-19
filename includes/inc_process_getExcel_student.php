@@ -28,7 +28,7 @@ if (count($lists) == 0) {
 
 
 $fileName = md5(time());
-$i_tmp_cnt = count($lists)+5;
+$i_tmp_cnt = count($lists) + 5;
 $mCoursemos->ozExtra->checkCountFlush('TOTAL', $i_tmp_cnt);
 header("Content-Length:".$i_tmp_cnt);
 header("X-Excel-File:".$fileName);

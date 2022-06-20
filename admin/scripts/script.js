@@ -15,7 +15,7 @@
 	},
   download:{
     // 워드 다운로드
-    document:function(type, aidx) {
+    document:function(document, aidx) {
 			new Ext.Window({
 				id:"ModuleBmoDownloadDocumentWindow",
 				title:"신청서 다운로드",
@@ -29,8 +29,8 @@
 						border:false,
 						items:[
 							new Ext.form.Hidden({
-								name:"type",
-								value:type
+								name:"document",
+								value:document
 							}),
 							new Ext.form.Hidden({
 								name:"aidx",
@@ -63,7 +63,7 @@
 								success:function(form,action) {
 									Ext.Msg.show({title:Admin.getText("alert/info"),msg:"문서 변환이 완료되었습니다.<br>확인 버튼을 클릭하시면 문서를 다운로드 받을 수 있습니다.",buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
 										Ext.getCmp("ModuleBmoDownloadDocumentWindow").close();
-										location.href = ENV.getProcessUrl("bmo","@downloadDocument")+"?type="+action.result.type+"&pidx="+action.result.pidx+"&aidx="+action.result.aidx+"&midx="+action.result.midx+"&file="+action.result.file+"&mime="+action.result.mime;
+										location.href = ENV.getProcessUrl("bmo","@downloadDocument")+"?type=word&file="+action.result.file+"&mime="+action.result.mime+"&file_name="+action.result.file_name;
 									}});
 								},
 								failure:function(form,action) {
@@ -84,6 +84,17 @@
 					})
 				]
 			}).show();
+    },
+    // pdf 다운
+    downloadPdf:function(document, aidx) {
+      $.send(ENV.getProcessUrl("bmo","@getDocument"),{document:"timetable",idx:idx},function(result) {
+        if (result.success == true) {
+          location.href = ENV.getProcessUrl("bmo","@downloadDocument") + "?type=pdf&file=" + result.file + "&mime=" + result.mime + "&file_name=" + result.file_name;
+        }
+      });
     }
+  },
+  preview:{
+
   }
  }

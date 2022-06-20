@@ -12,7 +12,7 @@ if (!$application) {
 
 
 $member = $mMember->getMember($application->midx);
-$title = '[신청서]'.$member->name.'_'.date('Y-m-d',time());
+$title = '[신청서]'.$member->name;
 $attachments = array();
 
 $is_file = Request('is_file') ? true : false;
@@ -96,9 +96,7 @@ if (count($attachments) > 0) {
 
 
 $results->success = true;
-$results->type = $type;
-$results->aidx = $aidx;
-$results->midx = $application->midx;
+$results->file_name = $title;
 $results->file = $file;
 $results->mime = $mime;
 

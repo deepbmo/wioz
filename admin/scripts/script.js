@@ -13,6 +13,94 @@
 	data:{
 		
 	},
+	form:{
+		add:function(idx) {
+			new Ext.Window({
+				id:"",
+				items:[
+					new Ext.TabPanel({
+						items:[
+							new Ext.form.Panel({
+								items:[
+									new Ext.form.FieldSet({
+										title:"기본정보",
+										items:[
+											// fieldLabel: radio_1 (radio_2 radio_2) radio_1
+											new Ext.form.RadioGroup({
+												id:"ModuleEtcformApplicationFormAddUseWriter",
+												fieldLabel:"작성자 사용여부",
+												flex:1,
+												columns:2,
+												hidden:true,
+												items:[
+													new Ext.form.FieldContainer({
+														layout:"hbox",
+														items:[
+															new Ext.form.Radio({
+																boxLabel:"사용",
+																name:"use_writer",
+																inputValue:'TRUE',
+																checked:true
+															}),
+															new Ext.form.FieldContainer({
+																id:"ModuleEtcformApplicationFormAddUseMasking",
+																layout:"hbox",
+																items:[
+																	new Ext.form.DisplayField({
+																		value:"(",
+																		style:{marginRight:"4px",marginLeft:"8px"},
+																	}),
+																	new Ext.form.RadioGroup({
+																		items:[
+																			new Ext.form.Radio({
+																				boxLabel:"마스킹 적용",
+																				name:"use_masking",
+																				inputValue:'TRUE'
+																			}),
+																			new Ext.form.Radio({
+																				boxLabel:"마스킹 미적용",
+																				name:"use_masking",
+																				inputValue:'FALSE',
+																				checked:true,
+																				width:90,
+																				style:{marginLeft:"8px"}
+																			})
+																		]
+																	}),
+																	new Ext.form.DisplayField({
+																		value:")",
+																		style:{marginLeft:"4px",marginRight:"8px"},
+																	})
+																]
+															})
+														]
+													}),
+													new Ext.form.Radio({
+														boxLabel:"미사용",
+										                name:"use_writer",
+										                inputValue:'FALSE'
+									                })
+												],
+												listeners:{
+													change:function(form,value){
+														if (value.use_writer === 'FALSE') {
+															Ext.getCmp("ModuleEtcformApplicationFormAddUseMasking").setHidden(true).setDisabled(true);
+														} else {
+															Ext.getCmp("ModuleEtcformApplicationFormAddUseMasking").setHidden(false).setDisabled(false);
+														}
+													}
+												}
+											})
+										]
+									})
+								]
+							})
+						]
+					})
+				]
+			})
+		}
+	},
   download:{
     // 워드 다운로드
     document:function(document, aidx) {

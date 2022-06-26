@@ -5,6 +5,7 @@
 
 # contents
 - [비트연산](#bitwise-operation)
+- [서버주소](#ozim)
 
 <br />
 <br />
@@ -35,6 +36,22 @@ $lists = $this->db()->select($this->table->program);
 if ($type == 'info') $lists->where('type & 4 = 0'); // 포함되지 않은 것
 else $lists->where('type & 4 > 0'); // 포함된 것
 $lists = $lists->get();
+```
+
+<br />
+
+<a name="ozim"></a>
+
+# 서버주소
+개발 서버와 운영 서버 주소 확인하는 법
+
+### 분기
+```php
+if (strpos($_SERVER['HTTP_HOST'],'ozim.kr') > 0 == true) {
+  $photo = 'http://'.$_SERVER['HTTP_HOST'].''.$member->photo;
+} else {
+  $photo = 'https://'.$_SERVER['HTTP_HOST'].''.$member->photo;
+}
 ```
 
 <br />

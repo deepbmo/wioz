@@ -48,9 +48,9 @@ $lists = $lists->get();
 ### 분기
 ```php
 if (strpos($_SERVER['HTTP_HOST'],'ozim.kr') > 0 == true) {
-  $photo = 'http://'.$_SERVER['HTTP_HOST'].''.$member->photo;
+  $photo = 'http://'.$_SERVER['HTTP_HOST'].$member->photo;
 } else {
-  $photo = 'https://'.$_SERVER['HTTP_HOST'].''.$member->photo;
+  $photo = 'https://'.$_SERVER['HTTP_HOST'].$member->photo;
 }
 ```
 

@@ -140,5 +140,23 @@
 				}
 			});
 		}
+  },
+  certificate:{
+    download:function($form) {
+      var pidx = $("input[name=pidx]",$form).val();
+			var aidx = $("input[name=aidx]",$form).val();
+			var midx = $("input[name=midx]",$form).val();
+			var start_time = $("input[name=start_time]",$form).val();
+
+			$.send(ENV.getProcessUrl("bmo","getCertificate"),{pidx:pidx,aidx:aidx,start_time:start_time,midx:midx},function(result) {
+				if (result.success == true) {
+					window.open(ENV.getProcessUrl("bmo","downloadDocument") + "?file=" + result.file + "&mime=" + result.mime + "&file_name=" + result.file_name);
+					iModule.modal.close();
+				}
+				return false;
+			});
+    }
   }
  }
+
+ // getModal - iModule.modal.get()

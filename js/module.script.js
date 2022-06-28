@@ -156,6 +156,74 @@
 				return false;
 			});
     }
+  },
+  diagnosis:{
+    init:function(id) {
+      var $form = $("#"+id);
+
+      if (id == 'ModuleBmoDiagnosisResultForm') {
+
+        $("button[data-action]",$form).on("click",function() {
+          var action = $(this).attr('data-action');
+  
+          if (action == 'compare') {
+            var type = $(this).attr('data-type');
+            Bmo.diagnosis.chart.compare($form, type);
+          }
+        });
+      }
+    },
+    chart:{
+      compare:function($form, type) {
+        var $chart = $("div[data-role=chart][data-chart=compare]",$form);
+
+        $chart.empty();
+        $chart.append($("<div>").addClass("loading").append($("<i>").addClass("mi mi-loading")));
+
+        var idx = $("input[name=idx]",$form).val();
+        var midx = $("input[name=midx]",$form).val();
+
+        $.send(ENV.getProcessUrl("bmo","getDiagnosisResultChartData"),{idx:idx, midx:midx, mode:"compare", type:type},function(result) {
+          if (result.success == true) {
+            var legend = $("input[name=legend]",$form).val().split(",");
+						var point = JSON.parse($("input[name=point]",$form).val());
+						var $yAxis = {
+							gridLineInterpolation:'polygon',
+							lineWidth:0,
+							tickInterval:20
+						};
+						if ($("input[name=type]",$form).val() == "A-POINT") {
+							$yAxis = {
+								gridLineInterpolation:'polygon',
+								lineWidth:0,
+								min:0,
+								max:5
+							};
+						}
+						$chart.empty();
+						$chart.highcharts({
+							chart:{polar:true,type:"area",backgroundColor:"transparent",style:{fontFamily:"inherit",fontSize:"12px", width:"100%"}},
+							title:null,
+							xAxis:{categories:legend,tickmarkPlacement:"on",lineWidth:0,labels:{distance:15,padding:0,reserveSpace:false}},
+							yAxis:$yAxis,
+							tooltip:{headerFormat:"",pointFormat:"<span style=\"font-family:inherit; font-size:12px;\">{series.name}: <b>{point.y:0f}점</b>"},
+							legend:{},
+							plotOptions:{
+								area:{
+									marker:{enabled:true},
+									pointPlacement:"on",
+									fillOpacity:0,
+									lineWidth:1
+								}
+							},
+							pane:{size:"80%"},
+							series:[{name:result.title,data:result.points,color:"#F44336",pointPlacement:"on"},{name:"나의 진단결과",data:point,color:"#2196F3"}]
+						});
+          }
+        });
+
+      }
+    }
   }
  }
 

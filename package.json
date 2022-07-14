@@ -1,0 +1,13 @@
+{
+	"version":"3.0.1",
+	"configs":{
+		"install_version":{
+			"type":"string",
+			"default":"3.0.1"
+		},
+		"last_check_version":{
+			"type":"int",
+			"default":300
+		}
+    }
+}

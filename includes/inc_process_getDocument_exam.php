@@ -53,6 +53,7 @@ $PHPWord->replaceTableVariable($costs,array('parseLineBreaks'=>true));
 
 
 $PHPWord->properties(array('creator'=>$application->name,'title'=>$title,'description'=>'','lastModifiedBy'=>'','Company'=>''));
+// 참고로 페이징처리는 워드문서 내에서 직접 설정해줘야 한다. [삽입] - [페이지번호]
 
 
 $document = $mAttachment->getTempFile(true);

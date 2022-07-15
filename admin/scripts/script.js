@@ -301,6 +301,126 @@
 			}).show();
 		}
 	},
+	etc:{
+		search:function(type,callback) {
+			if (type == 'department') {
+				new Ext.Window({
+					id:"ModuleCourseDepartmentSearchWindow",
+					title:"학과검색",
+					width:700,
+					height:500,
+					modal:true,
+					autoScroll:true,
+					border:false,
+					layout:"fit",
+					items:[
+						new Ext.grid.Panel({
+							id:"ModuleCourseDepartmentSearchResult",
+							border:false,
+							tbar:[
+								new Ext.form.TextField({
+									id:"MModuleCourseDepartmentSearchKeyword",
+									width:140,
+									emptyText:"학과명",
+									enableKeyEvents:true,
+									flex:1,
+									listeners:{
+										keyup:function(form,e) {
+											if (e.keyCode == 13) {
+												Ext.getCmp("ModuleCourseDepartmentSearchResult").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MModuleCourseDepartmentSearchKeyword").getValue());
+												Ext.getCmp("ModuleCourseDepartmentSearchResult").getStore().loadPage(1);
+											}
+										}
+									}
+								}),
+								new Ext.Button({
+									iconCls:"mi mi-search",
+									handler:function() {
+										Ext.getCmp("ModuleCourseDepartmentSearchResult").getStore().getProxy().setExtraParam("keyword",Ext.getCmp("MModuleCourseDepartmentSearchKeyword").getValue());
+										Ext.getCmp("ModuleCourseDepartmentSearchResult").getStore().loadPage(1);
+									}
+								})
+							],
+							store:new Ext.data.JsonStore({
+								proxy:{
+									type:"ajax",
+									simpleSortMode:true,
+									url:ENV.getProcessUrl("course","@getSearchDepartments"),
+									reader:{type:"json"}
+								},
+								remoteSort:true,
+								sorters:[{property:"idx",direction:"ASC"}],
+								autoLoad:false,
+								pageSize:50,
+								fields:["idx","institution","department"],
+								listeners:{
+									load:function(store,records,success,e) {
+										if (success == false) {
+											if (e.getError()) {
+												Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+											} else {
+												Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("LOAD_DATA_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+											}
+										}
+									}
+								}
+							}),
+							columns:[{
+								text:"단과대학",
+								dataIndex:"institution",
+								width:100,
+								flex:1
+							},{
+								text:"학과",
+								dataIndex:"department",
+								width:100,
+								flex:1
+							}],
+							selModel:new Ext.selection.CheckboxModel({mode:"SINGLE"}),
+							bbar:new Ext.PagingToolbar({
+								store:null,
+								displayInfo:false,
+								items:[
+									"->",
+									{xtype:"tbtext",text:"대상을 더블클릭하거나 선택 후 확인버튼을 클릭하여 주십시오."}
+								],
+								listeners:{
+									beforerender:function(tool) {
+										tool.bindStore(Ext.getCmp("ModuleCourseDepartmentSearchResult").getStore());
+									}
+								}
+							}),
+							listeners:{
+								itemdblclick:function(grid,record) {
+									callback(record.data);
+									Ext.getCmp("ModuleCourseDepartmentSearchWindow").close();
+								}
+							}
+						})
+					],
+					buttons:[
+						new Ext.Button({
+							text:"확인",
+							handler:function() {
+								if (Ext.getCmp("ModuleCourseDepartmentSearchResult").getSelectionModel().getSelection().length == 0) {
+									Ext.Msg.show({title:Admin.getText("alert/error"),msg:"선택된 학과가 없습니다.",buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+								} else {
+									callback(Ext.getCmp("ModuleCourseDepartmentSearchResult").getSelectionModel().getSelection().pop().data);
+									Ext.getCmp("ModuleCourseDepartmentSearchWindow").close();
+								}
+							}
+						}),
+						new Ext.Button({
+							text:"취소",
+							handler:function() {
+								Ext.getCmp("ModuleCourseDepartmentSearchWindow").close();
+							}
+						})
+					]
+				}).show();
+			}
+		}
+	}
   download:{
     // 워드 다운로드
     document:function(document, aidx) {

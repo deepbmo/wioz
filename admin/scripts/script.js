@@ -101,6 +101,206 @@
 			})
 		}
 	},
+	/**
+	 * 교과관리
+	 */
+	 lecture:{
+		/**
+		 * 교과목 생성
+		 */
+		add:function() {
+			new Ext.Window({
+				id:"ModuleCourseLectureAddWindow",
+				title:"교과목 생성",
+				width:500,
+				modal:true,
+				border:false,
+				layout:"fit",
+				bodyPadding:"10 10 5 10",
+				items:[
+					new Ext.form.Panel({
+						id:"ModuleCourseLectureAddForm",
+						border:false,
+						fieldDefaults:{labelAlign:"right",labelWidth:70,anchor:"100%",allowBlank:false},
+						items:[
+							new Ext.form.ComboBox({
+								name:"year",
+								fieldLabel:"학년도",
+								store:new Ext.data.JsonStore({
+									proxy:{
+										type:"ajax",
+										simpleSortMode:true,
+										url:ENV.getProcessUrl("course","@getYears"),
+										extraParams:{},
+										reader:{type:"json"}
+									},
+									remoteSort:true,
+									sorters:[{property:"title",direction:"ASC"}],
+									autoLoad:false,
+									fields:["display","value"],
+									listeners:{
+										load:function(store,records,success,e) {
+											if (success == false) {
+												if (e.getError()) {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:e.getError(),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+												} else {
+													Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getText("error/load"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+												}
+											}
+										}
+									}
+								}),
+								flex:1,
+								editable:false,
+								displayField:"display",
+								valueField:"value",
+								value:"",
+								listeners:{
+								}
+							}),
+							new Ext.form.ComboBox({
+								name:"semester",
+								fieldLabel:"학기",
+								store:new Ext.data.ArrayStore({
+									fields:["display","value"],
+									data:(function() {
+										var datas = [];
+										for (var type in Coursemos.getText('semester')) {
+											datas.push([Coursemos.getText('semester/'+type) ,type]);
+										}
+										return datas;
+									})()
+								}),
+								flex:1,
+								editable:false,
+								displayField:"display",
+								valueField:"value",
+								listeners:{
+								}
+							}),
+							new Ext.form.FieldContainer({
+								layout:"hbox",
+								items:[
+									new Ext.form.Hidden({
+										name:"iidx"
+									}),
+									new Ext.form.Hidden({
+										name:"didx"
+									}),
+									new Ext.form.TextField({
+										name:"department",
+										fieldLabel:"학과",
+										editable:false,
+										flex:1,
+										emptyText:"우측의 버튼을 클릭하여 학과를 검색하세요."
+									}),
+									new Ext.Button({
+										iconCls:"xi xi-magnifier",
+										text:"학과검색",
+										style:{marginLeft:"10px"},
+										width:100,
+										handler:function() {
+											Course.etc.search('department',function(result) {
+												Ext.Msg.show({title:Admin.getText("alert/info"),msg:result.department+"을(를) 선택하시겠습니까?",buttons:Ext.Msg.OKCANCEL,icon:Ext.Msg.QUESTION,fn:function(button) {
+													if (button == "ok") {
+														var c_department = result.institution + '/' + result.department
+														Ext.getCmp("ModuleCourseLectureAddForm").getForm().findField("iidx").setValue(result.iidx);
+														Ext.getCmp("ModuleCourseLectureAddForm").getForm().findField("didx").setValue(result.didx);
+														Ext.getCmp("ModuleCourseLectureAddForm").getForm().findField("department").setValue(c_department);
+													}
+												}});
+											});
+										}
+									})
+								],
+							}),
+							new Ext.form.FieldContainer({
+								layout:"hbox",
+								items:[
+									new Ext.form.Hidden({
+										name:"midx"
+									}),
+									new Ext.form.TextField({
+										name:"haksa",
+										fieldLabel:"교수",
+										editable:false,
+										flex:1,
+										emptyText:"우측의 버튼을 클릭하여 회원을 검색하세요."
+									}),
+									new Ext.Button({
+										iconCls:"xi xi-magnifier",
+										text:"사번검색",
+										style:{marginLeft:"10px"},
+										width:100,
+										handler:function() {
+											Coursemos.member(function(member) {
+												var value = member.name + '(' + member.haksa + ')';
+												Ext.getCmp("ModuleCourseLectureAddForm").getForm().findField("midx").setValue(member.idx);
+												Ext.getCmp("ModuleCourseLectureAddForm").getForm().findField("haksa").setValue(value);
+											});
+										}
+									})
+								],
+							}),
+							new Ext.form.TextField({
+								fieldLabel:"교과명",
+								name:"title"
+							}),
+							new Ext.form.TextField({
+								fieldLabel:"교과코드",
+								name:"code"
+							}),
+							new Ext.form.TextField({
+								fieldLabel:"학점",
+								name:"credit"
+							})
+						]
+					})
+				],
+				buttons:[
+					new Ext.Button({
+						text:Admin.getText("button/save"),
+						handler:function() {
+							Ext.getCmp("ModuleCourseLectureAddForm").getForm().submit({
+								url:ENV.getProcessUrl("course","@saveLecture"),
+								submitEmptyText:false,
+								waitTitle:Admin.getText("action/wait"),
+								waitMsg:Admin.getText("action/saving"),
+								success:function(form,action) {
+									Ext.Msg.show({title:Admin.getText("alert/info"),msg:Admin.getText("action/saved"),buttons:Ext.Msg.OK,icon:Ext.Msg.INFO,fn:function() {
+										Ext.getCmp("ModuleCourseLectureList").getStore().reload();
+										Ext.getCmp("ModuleCourseLectureAddWindow").close();
+									}});
+								},
+								failure:function(form,action) {
+									if (action.result) {
+										if (action.result.message) {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:action.result.message,buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										} else {
+											Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("DATA_SAVE_FAILED"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+										}
+									} else {
+										Ext.Msg.show({title:Admin.getText("alert/error"),msg:Admin.getErrorText("INVALID_FORM_DATA"),buttons:Ext.Msg.OK,icon:Ext.Msg.ERROR});
+									}
+								}
+							});
+						}
+					}),
+					new Ext.Button({
+						text:Admin.getText("button/cancel"),
+						handler:function() {
+							Ext.getCmp("ModuleCourseLectureAddWindow").close();
+						}
+					})
+				],
+				listeners:{
+					show:function() {
+
+					}
+				}
+			}).show();
+		}
+	},
   download:{
     // 워드 다운로드
     document:function(document, aidx) {

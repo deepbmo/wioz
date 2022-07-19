@@ -23,17 +23,13 @@ $title = $file_name.'_'.date('Y-m-d',time());
 
 
 if ($mime == 'application/zip') {
-
 	$mAttachment->tempFileDownload($file,true,$title.'.zip');
 
+} elseif ($mime == 'application/pdf') {
+	$mAttachment->tempFileDownload($file,true,$title.'.pdf');
+
 } else {
-
-	if ($type == 'word') { // word
-		$mAttachment->tempFileDownload($file,true,$title.'.docx');
-	} else { // pdf
-		$mAttachment->tempFileDownload($file,true,$title.'.pdf');
-	}
-
+	$mAttachment->tempFileDownload($file,true,$title.'.docx');
 }
 
 exit;

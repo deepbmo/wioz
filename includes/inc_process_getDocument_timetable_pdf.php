@@ -82,7 +82,7 @@ $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 $document = $mAttachment->getTempFile(true);
 $pdf->Output($document,'F');
 
-$mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+$mime = 'application/pdf';
 $file = basename($document);
 
 $results->success = true;

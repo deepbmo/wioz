@@ -71,7 +71,7 @@ $loopnum = 1;
 foreach($lists as $list) {
     $mCoursemos->ozExtra->checkCountFlush('ADD');
 
-  // list 가공
+    // list 가공
     $list->role = '';
 
 
@@ -85,42 +85,42 @@ foreach($lists as $list) {
 
         } else {
             switch ($columns[$i]) {
-            case 'loopnum' :
-                $value = $loopnum;
-                break;
+                case 'loopnum' :
+                    $value = $loopnum;
+                    break;
+                    
+                case 'campus' :
+                    $value = $mCoursemos->getCampus($list->campus);
+                    break;
+
+                case 'institution' :
+                    $value = $mCoursemos->getInstitution($list->member_iidx);
+                    break;
+
+                case 'department' :
+                    $value = $mCoursemos->getDepartment($list->member_didx);
+                    break;
                 
-            case 'campus' :
-                $value = $mCoursemos->getCampus($list->campus);
-                break;
+                case 'major' :
+                    $value = $mCoursemos->getDepartment($list->member_jidx);
+                    break;
+                
+                case 'name' :
+                    $value = $list->name;
+                    break;
 
-            case 'institution' :
-                $value = $mCoursemos->getInstitution($list->member_iidx);
-                break;
+                case 'grade' :
+                    $value = $list->grade != 'NONE' ? ($list->member_role == 'STUDENT' && $list->grade > 0 ? $list->grade.'학년' :'') : '';
+                    break;
 
-            case 'department' :
-                $value = $mCoursemos->getDepartment($list->member_didx);
-                break;
-            
-            case 'major' :
-                $value = $mCoursemos->getDepartment($list->member_jidx);
-                break;
-            
-            case 'name' :
-                $value = $list->name;
-                break;
-
-            case 'grade' :
-                $value = $list->grade != 'NONE' ? ($list->member_role == 'STUDENT' && $list->grade > 0 ? $list->grade.'학년' :'') : '';
-                break;
-
-            case 'role' :					
-                $member = $mMember->getMember($list->midx);
-                $value = $mCoursemos->getRoleTitle($member->coursemos->role, $member->coursemos->grade);
-                break;
-            
-            default:
-                $value = null;
-                break;
+                case 'role' :					
+                    $member = $mMember->getMember($list->midx);
+                    $value = $mCoursemos->getRoleTitle($member->coursemos->role, $member->coursemos->grade);
+                    break;
+                
+                default:
+                    $value = null;
+                    break;
             }
 
             $mPHPExcel->getActiveSheet()->setCellValue($column.($loopnum+1),$value);

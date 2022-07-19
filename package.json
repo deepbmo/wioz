@@ -9,5 +9,12 @@
 			"type":"int",
 			"default":300
 		}
-    }
+    },
+	"targets":{
+		"core":{
+			"afterInstall":[
+				"*"
+			]
+		}
+	}
 }

@@ -5,7 +5,7 @@ $aidx = Param('aidx');
 $application = $this->getApplication($type,$aidx);
 
 if (!$application) {
-  $results->success = false;
+	$results->success = false;
 	$results->message = $this->getErrorText('NOT_FOUND');
 	return;
 }
@@ -30,7 +30,7 @@ $costs = array();
 $loopnum = 1;
 
 foreach($lists as $list) {
-  $costs[] = array(
+	$costs[] = array(
 		'NO'=>$loopnum,
 		'NAME'=>$list->name,
 		'ASSIGN'=>$list->assign,
@@ -62,10 +62,10 @@ $PHPWord->saveFile($document);
 
 if ($is_file) {
 	$files = $this->db()->select($this->table->application_file);
-  $files->where('type',strtoupper($type));
-  $files->where('aidx',$aidx);
-  $files = $files->get();
-  
+	$files->where('type',strtoupper($type));
+	$files->where('aidx',$aidx);
+	$files = $files->get();
+
 	for ($i=0; $i<count($files); $i++) {
 		$file = $mAttachment->getFileInfo($files[$i]->idx,true);
 		if ($file != null) {

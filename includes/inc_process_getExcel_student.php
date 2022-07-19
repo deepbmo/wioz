@@ -5,7 +5,7 @@ $pidx = Param('pidx');
 $program = $this->getProgram($pidx);
 
 if (!$program) {
-  $results->success = false;
+    $results->success = false;
 	$results->message = $this->getErrorText('NOT_FOUND');
 	return;
 }
@@ -53,90 +53,90 @@ for ($i=0; $i<count($columns); $i++) {
 		$mPHPExcel->getActiveSheet()->duplicateStyle($mPHPExcel->getActiveSheet()->getStyle('A2'),$column.'2');
 	}
 
-  $mPHPExcel->getActiveSheet()->setCellValue($column.'1',$mCoursemos->ozExtra->AnyToString($this->getText('excel/column/'.$columns[$i]))); // 특수기호 제거
+    $mPHPExcel->getActiveSheet()->setCellValue($column.'1',$mCoursemos->ozExtra->AnyToString($this->getText('excel/column/'.$columns[$i]))); // 특수기호 제거
 
-  $columnLengths[$i] = strlen($this->getText('excel/column/'.$columns[$i]));
+    $columnLengths[$i] = strlen($this->getText('excel/column/'.$columns[$i]));
 
-  // 정렬
-  if (in_array($columns[$i],array('loopnum','institution','department','name','haksa','gender','grade','role','member_status'))) {
-    $mPHPExcel->getActiveSheet()->getStyle($column.'2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-  } else {
-    $mPHPExcel->getActiveSheet()->getStyle($column.'2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-  }
+    // 정렬
+    if (in_array($columns[$i],array('loopnum','institution','department','name','haksa','gender','grade','role','member_status'))) {
+        $mPHPExcel->getActiveSheet()->getStyle($column.'2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    } else {
+        $mPHPExcel->getActiveSheet()->getStyle($column.'2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+    }
 }
 
 
 // 데이터 그리기
 $loopnum = 1;
 foreach($lists as $list) {
-  $mCoursemos->ozExtra->checkCountFlush('ADD');
+    $mCoursemos->ozExtra->checkCountFlush('ADD');
 
   // list 가공
-  $list->role = '';
+    $list->role = '';
 
 
-  for ($i=0; $i<count($columns); $i++) {
-    $column = $mPHPExcel->getActiveSheet()->getCell()->stringFromColumnIndex($i);
+    for ($i=0; $i<count($columns); $i++) {
+        $column = $mPHPExcel->getActiveSheet()->getCell()->stringFromColumnIndex($i);
 
-    if ($columns[$i] == 'reg_date') {
-      $mPHPExcel->getActiveSheet()->setCellValue($column.($loopnum+1),PHPExcel_Shared_Date::PHPToExcel(new DateTime(date('Y-m-d H:i:s',round($list->reg_date / 1000)))));
-      $mPHPExcel->getActiveSheet()->getStyle($column.($loopnum+1))->getNumberFormat()->setFormatCode('yyyy-mm-dd hh:mm:ss');
-      $columnLengths[$i] = 18;
+        if ($columns[$i] == 'reg_date') {
+            $mPHPExcel->getActiveSheet()->setCellValue($column.($loopnum+1),PHPExcel_Shared_Date::PHPToExcel(new DateTime(date('Y-m-d H:i:s',round($list->reg_date / 1000)))));
+            $mPHPExcel->getActiveSheet()->getStyle($column.($loopnum+1))->getNumberFormat()->setFormatCode('yyyy-mm-dd hh:mm:ss');
+            $columnLengths[$i] = 18;
 
-    } else {
-      switch ($columns[$i]) {
-        case 'loopnum' :
-          $value = $loopnum;
-          break;
-          
-        case 'campus' :
-          $value = $mCoursemos->getCampus($list->campus);
-          break;
+        } else {
+            switch ($columns[$i]) {
+            case 'loopnum' :
+                $value = $loopnum;
+                break;
+                
+            case 'campus' :
+                $value = $mCoursemos->getCampus($list->campus);
+                break;
 
-        case 'institution' :
-          $value = $mCoursemos->getInstitution($list->member_iidx);
-          break;
+            case 'institution' :
+                $value = $mCoursemos->getInstitution($list->member_iidx);
+                break;
 
-        case 'department' :
-          $value = $mCoursemos->getDepartment($list->member_didx);
-          break;
-        
-        case 'major' :
-          $value = $mCoursemos->getDepartment($list->member_jidx);
-          break;
-        
-        case 'name' :
-          $value = $list->name;
-          break;
+            case 'department' :
+                $value = $mCoursemos->getDepartment($list->member_didx);
+                break;
+            
+            case 'major' :
+                $value = $mCoursemos->getDepartment($list->member_jidx);
+                break;
+            
+            case 'name' :
+                $value = $list->name;
+                break;
 
-        case 'grade' :
-          $value = $list->grade != 'NONE' ? ($list->member_role == 'STUDENT' && $list->grade > 0 ? $list->grade.'학년' :'') : '';
-          break;
+            case 'grade' :
+                $value = $list->grade != 'NONE' ? ($list->member_role == 'STUDENT' && $list->grade > 0 ? $list->grade.'학년' :'') : '';
+                break;
 
-        case 'role' :					
-          $member = $mMember->getMember($list->midx);
-          $value = $mCoursemos->getRoleTitle($member->coursemos->role, $member->coursemos->grade);
-          break;
-        
-        default:
-          $value = null;
-          break;
-      }
+            case 'role' :					
+                $member = $mMember->getMember($list->midx);
+                $value = $mCoursemos->getRoleTitle($member->coursemos->role, $member->coursemos->grade);
+                break;
+            
+            default:
+                $value = null;
+                break;
+            }
 
-      $mPHPExcel->getActiveSheet()->setCellValue($column.($loopnum+1),$value);
-      $columnLengths[$i] = $columnLengths[$i] < strlen($value) ? strlen($value) : $columnLengths[$i];
+            $mPHPExcel->getActiveSheet()->setCellValue($column.($loopnum+1),$value);
+            $columnLengths[$i] = $columnLengths[$i] < strlen($value) ? strlen($value) : $columnLengths[$i];
+        }
     }
-  }
 
-  $loopnum++;
+    $loopnum++;
 }
 
 for ($i=0; $i<count($columnLengths); $i++) {
-	$column = $mPHPExcel->getActiveSheet()->getCell()->stringFromColumnIndex($i);
-	$length = $columnLengths[$i];
-	$length = $length > 35 ? 35 : $length;
-	$length = $length < 8 ? 8 : $length;
-	$mPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth($length * 1.25);
+    $column = $mPHPExcel->getActiveSheet()->getCell()->stringFromColumnIndex($i);
+    $length = $columnLengths[$i];
+    $length = $length > 35 ? 35 : $length;
+    $length = $length < 8 ? 8 : $length;
+    $mPHPExcel->getActiveSheet()->getColumnDimension($column)->setWidth($length * 1.25);
 }
 
 $mPHPExcel->getActiveSheet()->setAutoFilter('A1:G1');

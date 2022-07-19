@@ -24,10 +24,10 @@ if ($document == 'exam') {
 
 } elseif ($document == 'ip') {
 	REQUIRE_ONCE $this->getModule()->getPath().'/includes/inc_process_getDocument_ip.php';
-  
+
 } elseif ($document == 'timetable_pdf') {
 	REQUIRE_ONCE $this->getModule()->getPath().'/includes/inc_process_getDocument_timetable_pdf.php';
-  
+
 }
 
 ?>

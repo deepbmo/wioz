@@ -15,7 +15,7 @@
 // '/ko/module/모듈명/@컨테이너명/view/idxes[0]/idxes[1]' @: defined('__IM_CONTAINER_POPUP__') == true
 // 'baseUrl' + view (getView) 👉🏻  Bmo.getUrl('list');
 
- var Bmo = {
+var Bmo = {
 	oDATA:{
 		
 	},
@@ -29,75 +29,75 @@
 	init:function(id) {
 		var $form = $("#"+id);
 
-  },
-  application:{
-    init:function(id) {
-      if (id == 'ModuleBmoApplicationForm') {
-        // 버튼 action
-        $("button[data-action]",$form).on("click",function() {
-          var action = $(this).attr('data-action');
-  
-          if (action == 'certificate') {
-            var pidx = $(this).attr('data-pidx');
-            var tidx = $(this).attr('data-tidx');
+	},
+	application:{
+		init:function(id) {
+			if (id == 'ModuleBmoApplicationForm') {
+				// 버튼 action
+				$("button[data-action]",$form).on("click",function() {
+					var action = $(this).attr('data-action');
+			
+					if (action == 'certificate') {
+						var pidx = $(this).attr('data-pidx');
+						var tidx = $(this).attr('data-tidx');
 
-            // 컨텍스트 이동 (window popup)
-            // openPopup(url,width,height,scroll,name) scroll: 스크롤바 여부, name: 창이름
-            iModule.openPopup(ENV.getModuleUrl("eco","@certificate","view",pidx+"/"+tidx),800,800,1,"certificate_"+pidx+"_"+tidx);  
+						// 컨텍스트 이동 (window popup)
+						// openPopup(url,width,height,scroll,name) scroll: 스크롤바 여부, name: 창이름
+						iModule.openPopup(ENV.getModuleUrl("eco","@certificate","view",pidx+"/"+tidx),800,800,1,"certificate_"+pidx+"_"+tidx);  
 
-            
-          } else if (action == 'modify') {
-            var aidx = $(this).attr('data-aidx');
-  
-            Bmo.application.modify(aidx);
-          } else if (action == 'search') { // 검색 (쿼리스트링)
-            var year = $("select[name=year]").val();
-            var semester = $("select[name=semester]").val();
-            var keyword = $("input[name=keyword]").val();
+						
+					} else if (action == 'modify') {
+						var aidx = $(this).attr('data-aidx');
+			
+						Bmo.application.modify(aidx);
+					} else if (action == 'search') { // 검색 (쿼리스트링)
+						var year = $("select[name=year]").val();
+						var semester = $("select[name=semester]").val();
+						var keyword = $("input[name=keyword]").val();
 
-            var ary_queryString = [];
-            var queryString = '';
+						var ary_queryString = [];
+						var queryString = '';
 
-            if (year) ary_queryString.push("year=" + year);
-            if (semester) ary_queryString.push("semester=" + semester);
-            if (keyword) ary_queryString.push("keyword=" + keyword);
-			      if (ary_queryString.length > 0) queryString = ary_queryString.join("&");
+						if (year) ary_queryString.push("year=" + year);
+						if (semester) ary_queryString.push("semester=" + semester);
+						if (keyword) ary_queryString.push("keyword=" + keyword);
+						if (ary_queryString.length > 0) queryString = ary_queryString.join("&");
 
-            location.href = ENV.getModuleUrl('bmo','application','list')+ "?" + queryString;
-          } else if (action == 'save') {
-            iModule.modal.show("안내",'<div data-role="message">제출 후에는 다시 수정할 수 없습니다.<br>제출를 하시겠습니까?.</div>', {},
-              [
-                {text:"취소",class:"cancel",click:"close"},
-                {text:"제출",class:"submit",click:function(){
-                  $(this).status("loading");
-                  $("input[name=status]",$form).val('END');
-                  Bmo.application.submit($form);
-                }}
-              ]
-            );
-          } else if (action == 'sms') {
-            var midxes = [];
-            $("input[type=checkbox][name='idxes[]']:checked",$form).each(function() {
+						location.href = ENV.getModuleUrl('bmo','application','list')+ "?" + queryString;
+					} else if (action == 'save') {
+						iModule.modal.show("안내",'<div data-role="message">제출 후에는 다시 수정할 수 없습니다.<br>제출를 하시겠습니까?.</div>', {},
+							[
+								{text:"취소",class:"cancel",click:"close"},
+								{text:"제출",class:"submit",click:function(){
+									$(this).status("loading");
+									$("input[name=status]",$form).val('END');
+									Bmo.application.submit($form);
+								}}
+							]
+						);
+					} else if (action == 'sms') {
+						var midxes = [];
+						$("input[type=checkbox][name='idxes[]']:checked",$form).each(function() {
 							var value = parseInt($(this).closest('li').find('span.name').attr('data-midx'));
 							midxes.push(value);
 						});
 
-            if (midxes.length == 0) {
+						if (midxes.length == 0) {
 							iModule.modal.alert("안내","SMS를 발송할 대상을 선택해 주십시오.");
 						} else {
 							Bmo.sendPopup(midxes);
 						}
-          }
-        });
+					}
+				});
 
-        // 검색 (GET 방식 폼 전송)
-        $("div.toolbar > select.search",$form).on("change",function() {
+				// 검색 (GET 방식 폼 전송)
+				$("div.toolbar > select.search",$form).on("change",function() {
 					$form.attr("method","GET");
 					$form.submit();
 				});
 
-        // 정렬
-        $("span.btn-sort",$form).on("click",function(){
+				// 정렬
+				$("span.btn-sort",$form).on("click",function(){
 					var sortType = $(this).attr('data-sort');
 					$("input[name=sort_type]").val(sortType);
 
@@ -111,39 +111,39 @@
 					$form.submit();
 				});
 
-        // 엔터 검색
-        $("input[name=keyword",$form).on("keydown",function(e) {
-          if (e.keyCode === 13) {
-            e.preventDefault();
-            $(this).parent().next().trigger('click');
-          }
-        });
+				// 엔터 검색
+				$("input[name=keyword",$form).on("keydown",function(e) {
+					if (e.keyCode === 13) {
+						e.preventDefault();
+						$(this).parent().next().trigger('click');
+					}
+				});
 
-        $form.inits(Bmo.application.submit);
-      }
-    },
-    modify:function(idx) {
-      // process
-      $.send(ENV.getProcessUrl("bmo","saveApplication"),{idx:idx},function(result) { // idx 값은 Param('idx') 으로 받음.
+				$form.inits(Bmo.application.submit);
+			}
+		},
+		modify:function(idx) {
+			// process
+			$.send(ENV.getProcessUrl("bmo","saveApplication"),{idx:idx},function(result) { // idx 값은 Param('idx') 으로 받음.
 				if (result.success == true) {
 				} else {
-        }
+				}
 			});
-    },
-    submit:function ($form) {
+		},
+		submit:function ($form) {
 			$form.send(ENV.getProcessUrl("bmo","saveApplication"),function(result) {
 				if (result.success == true) {
-          iModule.modal.show('안내','<div data-role="message">정상적으로 저장되었습니다.</div>',{},[{text:"확인",class:"submit",click:function(){
-            // 링크 이동 (getUrl)
+					iModule.modal.show('안내','<div data-role="message">정상적으로 저장되었습니다.</div>',{},[{text:"확인",class:"submit",click:function(){
+						// 링크 이동 (getUrl)
 						location.href = Bmo.getUrl("list");
 					}}]);
 				}
 			});
 		}
-  },
-  certificate:{
-    download:function($form) {
-      var pidx = $("input[name=pidx]",$form).val();
+	},
+	certificate:{
+		download:function($form) {
+			var pidx = $("input[name=pidx]",$form).val();
 			var aidx = $("input[name=aidx]",$form).val();
 			var midx = $("input[name=midx]",$form).val();
 			var start_time = $("input[name=start_time]",$form).val();
@@ -155,37 +155,37 @@
 				}
 				return false;
 			});
-    }
-  },
-  diagnosis:{
-    init:function(id) {
-      var $form = $("#"+id);
+		}
+	},
+	diagnosis:{
+		init:function(id) {
+			var $form = $("#"+id);
 
-      if (id == 'ModuleBmoDiagnosisResultForm') {
+			if (id == 'ModuleBmoDiagnosisResultForm') {
 
-        $("button[data-action]",$form).on("click",function() {
-          var action = $(this).attr('data-action');
-  
-          if (action == 'compare') {
-            var type = $(this).attr('data-type');
-            Bmo.diagnosis.chart.compare($form, type);
-          }
-        });
-      }
-    },
-    chart:{
-      compare:function($form, type) {
-        var $chart = $("div[data-role=chart][data-chart=compare]",$form);
+				$("button[data-action]",$form).on("click",function() {
+					var action = $(this).attr('data-action');
 
-        $chart.empty();
-        $chart.append($("<div>").addClass("loading").append($("<i>").addClass("mi mi-loading")));
+					if (action == 'compare') {
+					var type = $(this).attr('data-type');
+					Bmo.diagnosis.chart.compare($form, type);
+					}
+				});
+			}
+		},
+		chart:{
+			compare:function($form, type) {
+				var $chart = $("div[data-role=chart][data-chart=compare]",$form);
 
-        var idx = $("input[name=idx]",$form).val();
-        var midx = $("input[name=midx]",$form).val();
+				$chart.empty();
+				$chart.append($("<div>").addClass("loading").append($("<i>").addClass("mi mi-loading")));
 
-        $.send(ENV.getProcessUrl("bmo","getDiagnosisResultChartData"),{idx:idx, midx:midx, mode:"compare", type:type},function(result) {
-          if (result.success == true) {
-            var legend = $("input[name=legend]",$form).val().split(",");
+				var idx = $("input[name=idx]",$form).val();
+				var midx = $("input[name=midx]",$form).val();
+
+				$.send(ENV.getProcessUrl("bmo","getDiagnosisResultChartData"),{idx:idx, midx:midx, mode:"compare", type:type},function(result) {
+					if (result.success == true) {
+						var legend = $("input[name=legend]",$form).val().split(",");
 						var point = JSON.parse($("input[name=point]",$form).val());
 						var $yAxis = {
 							gridLineInterpolation:'polygon',
@@ -219,12 +219,12 @@
 							pane:{size:"80%"},
 							series:[{name:result.title,data:result.points,color:"#F44336",pointPlacement:"on"},{name:"나의 진단결과",data:point,color:"#2196F3"}]
 						});
-          }
-        });
+					}
+				});
 
-      }
-    }
-  }
- }
+			}
+		}
+	}
+}
 
  // getModal - iModule.modal.get()

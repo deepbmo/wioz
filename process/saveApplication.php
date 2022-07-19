@@ -33,12 +33,12 @@ $email = RequestXss('email') ? RequestXss('email') : $errors['email'] = $this->g
 
 
 if (count($errors) == 0) {
-  $extra = new stdClass();
-  $extra->foreigner = $foreigner;
-  $extra->minority = $minority;
-  $extra_json = json_encode($extra, JSON_UNESCAPED_UNICODE); // 숫자가 있을 경우: json_encode($extra, SON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	$extra = new stdClass();
+	$extra->foreigner = $foreigner;
+	$extra->minority = $minority;
+	$extra_json = json_encode($extra, JSON_UNESCAPED_UNICODE); // 숫자가 있을 경우: json_encode($extra, SON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 
-  $insert = new stdClass();
+	$insert = new stdClass();
 	$insert['pidx'] = $idx;
 	$insert['midx'] = $midx;
 	$insert['cellphone'] = $cellphone;

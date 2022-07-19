@@ -24,9 +24,9 @@ $attachments = array();
 
 
 if ($document == 'student') {
-  REQUIRE_ONCE $this->getModule()->getPath().'/includes/inc_process_getExcel_student.php';
+	REQUIRE_ONCE $this->getModule()->getPath().'/includes/inc_process_getExcel_student.php';
 } elseif ($document == 'mentoring') {
-  REQUIRE_ONCE $this->getModule()->getPath().'/includes/inc_process_getExcel_mentoring.php';
+	REQUIRE_ONCE $this->getModule()->getPath().'/includes/inc_process_getExcel_mentoring.php';
 }
 
 

@@ -4,8 +4,8 @@ $idx = Request('idx');
 
 $program = $this->getProgram($idx);
 
-if ($!program) {
-  $results->success = false;
+if (!$program) {
+	$results->success = false;
 	$results->message = $this->getErrorText('NOT_FOUND');
 	return;
 }
@@ -32,49 +32,49 @@ $html = '';
 
 // 스타일 지정
 $html .= '
-  <style>
+	<style>
 
-  </style>';
+	</style>';
 
 
 // 구조
 $html .= '
-  <div class="box-view">
-    <h2 class="title"></h2>';
+	<div class="box-view">
+	<h2 class="title"></h2>';
 
-    foreach($ary_table as $item) {
-      $html .= '
-        <div class="tb">
-          <table>
+	foreach($ary_table as $item) {
+		$html .= '
+		<div class="tb">
+			<table>
 
-            <thead>
-              <tr>
-                <th>이름</th>
-              </tr>
-            </thead>
+			<thead>
+				<tr>
+				<th>이름</th>
+				</tr>
+			</thead>
 
-            <tbody>';
+			<tbody>';
 
-              $loopnum = 1;
-              foreach($lists as $item) {
-                $html .= '
-                  <tr>
-                    <td>'.$item->name.'</td>
-                  </tr>';
-              }
-              $loopnum++;
+				$loopnum = 1;
+				foreach($lists as $item) {
+				$html .= '
+					<tr>
+					<td>'.$item->name.'</td>
+					</tr>';
+				}
+				$loopnum++;
 
-                $html .= '
-            </tbody>
+				$html .= '
+			</tbody>
 
-          </table>
-        </div>
+			</table>
+		</div>
 
-        <br pagebreak="true">'; // 페이지 구분
-    }
+		<br pagebreak="true">'; // 페이지 구분
+	}
 
-    $html .= '
-  </div>';
+	$html .= '
+	</div>';
 
 
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);

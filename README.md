@@ -6,6 +6,7 @@
 # contents
 - [비트연산](#bitwise-operation)
 - [서버주소](#ozim)
+- [링크이동](#link)
 
 <br />
 <br />
@@ -52,6 +53,20 @@ if (strpos($_SERVER['HTTP_HOST'],'ozim.kr') > 0 == true) {
 } else {
   $photo = 'https://'.$_SERVER['HTTP_HOST'].$member->photo;
 }
+
+$protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
 ```
 
+<br />
+
+<a name="link"></a>
+
+# 링크 이동
+프로세스, 컨텍스트 링크 이동
+
+### 프로세스
+주소: /ko/process/모듈명/프로세스파일명
+
+### 컨텍스트
+주소: /ko/module/모듈명/@컨테이너명/view/idx
 <br />

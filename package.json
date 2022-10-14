@@ -16,5 +16,36 @@
 				"*"
 			]
 		}
+	},
+	"databases":{
+		"mentoring_method_table":{
+			"columns":{
+				"idx":{
+					"type":"int",
+					"length":11,
+					"comment":"고유값"
+				},
+				"title":{
+					"type":"varchar",
+					"length":100,
+					"comment":"운영방식명"
+				},
+				"sort":{
+					"type":"int",
+					"length":11,
+					"default":0,
+					"comment":"정렬"
+				}
+			},
+			"indexes":{
+				"idx":"primary_key"
+			},
+			"datas":[
+				{"idx":"1","title":"온라인","sort":0},
+				{"idx":"2","title":"오프라인","sort":1}
+			],
+			"auto_increment":"idx",
+			"comment":"멘토링 운영방식 테이블"
+		}
 	}
 }

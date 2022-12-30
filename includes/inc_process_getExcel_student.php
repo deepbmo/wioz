@@ -53,9 +53,26 @@ for ($i=0; $i<count($columns); $i++) {
 		$mPHPExcel->getActiveSheet()->duplicateStyle($mPHPExcel->getActiveSheet()->getStyle('A2'),$column.'2');
 	}
 
-    $mPHPExcel->getActiveSheet()->setCellValue($column.'1',$mCoursemos->ozExtra->AnyToString($this->getText('excel/column/'.$columns[$i]))); // 특수기호 제거
+    // $mPHPExcel->getActiveSheet()->setCellValue($column.'1',$mCoursemos->ozExtra->AnyToString($this->getText('excel/column/'.$columns[$i]))); // 특수기호 제거
 
-    $columnLengths[$i] = strlen($this->getText('excel/column/'.$columns[$i]));
+    // $columnLengths[$i] = strlen($this->getText('excel/column/'.$columns[$i]));
+
+    if ($columns[$i] == 'loopnum') $column_title = '순번';
+    elseif ($columns[$i] == 'category') $column_title = '카테고리';
+    elseif ($columns[$i] == 'title') $column_title = '제목';
+    elseif ($columns[$i] == 'term') $column_title = '활동기간';
+    elseif ($columns[$i] == 'activity') $column_title = '활동자료';
+    elseif ($columns[$i] == 'institution') $column_title = '단과대학';
+    elseif ($columns[$i] == 'department') $column_title = '학과';
+    elseif ($columns[$i] == 'name') $column_title = '이름';
+    elseif ($columns[$i] == 'haksa') $column_title = '학번';
+    elseif ($columns[$i] == 'state') $column_title = '재적';
+    elseif ($columns[$i] == 'grade') $column_title = '학년';
+    elseif ($columns[$i] == 'cellphone') $column_title = '핸드폰';
+    elseif ($columns[$i] == 'email') $column_title = '이메일';
+    elseif ($columns[$i] == 'reg_date') $column_title = '등록일자';
+
+    $columnLengths[$i] = strlen($column_title);
 
     // 정렬
     if (in_array($columns[$i],array('loopnum','institution','department','name','haksa','gender','grade','role','member_status'))) {
@@ -141,6 +158,7 @@ for ($i=0; $i<count($columnLengths); $i++) {
 
 $mPHPExcel->getActiveSheet()->setAutoFilter('A1:G1');
 $mPHPExcel->getActiveSheet()->freezePane('H2');
+$mPHPExcel->setActiveSheetIndex(0);  // 첫번째 탭 선택
 
 
 // 하단에 다운받은 시간과 이름 출력

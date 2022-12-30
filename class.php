@@ -179,6 +179,13 @@ function getCourseContext($configs=null) {
 		$footer = PHP_EOL.'</div>'.PHP_EOL.'<script>Course.init("ModuleCourseList");</script>'.PHP_EOL;
 
 	} elseif ($view == 'write') {
+		$o_data = $this->db()->select($this->table->program)->where('idx',$idx)->getOne();
+
+		$uploader = $this->IM->getModule('attachment')->setTemplet('default')->setModule('portfolio')->setWysiwyg('introspection');
+		if ($o_data) {
+			$uploader->setLoader($this->IM->getProcessUrl('portfolio','getWorkshopFiles',array('idx'=>Encoder($o_data->idx))));
+		}
+
 		$header = PHP_EOL.'<form id="ModuleAdvisorPortfolioRequestForm">'.PHP_EOL;
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Advisor.request.init("ModuleAdvisorPortfolioRequestForm");</script>'.PHP_EOL;
 

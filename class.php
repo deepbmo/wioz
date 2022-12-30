@@ -186,10 +186,18 @@ function getCourseContext($configs=null) {
 			$uploader->setLoader($this->IM->getProcessUrl('portfolio','getWorkshopFiles',array('idx'=>Encoder($o_data->idx))));
 		}
 
+		$introspection = $this->IM->getModule('wysiwyg')->decodeContent($o_data->introspection,false);
+		$wysiwyg = $this->IM->getModule('wysiwyg')->setModule('portfolio')->setName('introspection')->setRequired(false)->setContent($introspection);
+
 		$header = PHP_EOL.'<form id="ModuleAdvisorPortfolioRequestForm">'.PHP_EOL;
 		$footer = PHP_EOL.'</form>'.PHP_EOL.'<script>Advisor.request.init("ModuleAdvisorPortfolioRequestForm");</script>'.PHP_EOL;
 
 	} elseif ($view == 'view') {
+		
+		$o_data = $this->db()->select($this->table->program)->where('idx',$idx)->getOne();
+		$introspection = $this->IM->getModule('wysiwyg')->decodeContent($o_data->introspection);
+
+
 		$header = PHP_EOL.'<div id="ModuleCourseView">'.PHP_EOL;
 		$footer = PHP_EOL.'</div>'.PHP_EOL.'<script>Course.init("ModuleCourseView");</script>'.PHP_EOL;
 	}

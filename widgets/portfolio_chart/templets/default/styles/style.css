@@ -1,0 +1,12 @@
+/**
+ * 이 파일은 부산대 모듈의 일부입니다. (http://www.coursemos.kr)
+ *
+ * 비교과 그룹별 프로그램  위젯 - 기본 템플릿 스타일시트
+ *
+ * @file /modules/pusan/widgets/portoflio_chart/templets/default/styles/style.css
+ * @modified 2022. 10. 18.
+*/
+
+div[data-widget=pusan-portfolio_chart][data-templet=default] {}
+
+div[data-widget=pusan-portfolio_chart][data-templet=default] .hide {position: absolute; overflow:  hidden; border: 0; margin: -1px; width: 1px; height: 1px; clip: rect(1px, 1px, 1px, 1px); clip-path: inset(50%);}

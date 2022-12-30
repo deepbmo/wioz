@@ -1,0 +1,28 @@
+{
+	"title":{
+		"ko":"부산대 포트폴리오 메인 차트 위젯"
+	},
+	"version":"3.0.0",
+	"description":{
+		"ko":""
+	},
+	"author":{
+		"name":"",
+		"email":""
+	},
+	"homepage":"http://www.coursemos.kr",
+	"dependencies":{
+		"core":"3.0.0",
+		"eco":"3.0.0"
+	},
+	"language":"ko",
+	"configs":{
+		"type":{
+			"title":{
+				"ko":"종류(essential/major)"
+			},
+			"type":"string",
+			"is_required":true
+		}
+	}
+}

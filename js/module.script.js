@@ -129,6 +129,32 @@ var Bmo = {
 				} else {
 				}
 			});
+
+			// iModule.modal.confirm
+			iModule.modal.confirm("안내","통학버스 탑승시간을 변경하시겠습니까?",function($button) {
+				if ($button.attr("data-action") == "ok") {
+					$button.status("loading");
+					$.send(ENV.getProcessUrl("pusan","changeAppSchoolpass"),{
+						term:term,
+						chasu:chasu,
+						kind:kind,
+						haksa:haksa,
+						location_cd:location_cd,
+						time:time
+					},function(result) {
+						if (result.success == true) {
+							iModule.modal.show("안내",'<div data-role="message">'+result.message+'</div>',{},[{text:"확인",class:"submit",click:function() {
+								window.location.reload();
+								iModule.modal.close();
+							}}]);
+						} else {
+							iModule.modal.alert("안내",result.message);
+						}
+					});
+				} else {
+					iModule.modal.close();
+				}
+			});
 		},
 		submit:function ($form) {
 			$form.send(ENV.getProcessUrl("bmo","saveApplication"),function(result) {

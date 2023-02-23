@@ -8,6 +8,11 @@
 		"last_check_version":{
 			"type":"int",
 			"default":300
+		},
+		"dept_certificate_no":{
+			"type":"text",
+			"default":"",
+			"comment":"운영기관 이수증 형식 json"
 		}
     },
 	"targets":{

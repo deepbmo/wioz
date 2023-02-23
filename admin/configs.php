@@ -22,10 +22,27 @@ new Ext.form.Panel({
 	items:[
 		new Ext.form.Hidden({
 			name:"install_version"
+		}),
+		new Ext.form.Hidden({
+			name:"dept_certificate_no"
 		})
 	],
 	listeners:{
 		actioncomplete:function(form,action) {
+			if (action.type == "load") {
+				var oData = action.result.data;
+				var $form = Ext.getCmp("ModuleConfigForm").getForm();
+				if ($form.findField("use_department_certificate_no").checked) { // 운영기관별 이수번호 형식 체크시
+					var $dept_certificate_no = $form.findField("dept_certificate_no");
+					var o_dept_certificate_no = oData.dept_certificate_no ? JSON.parse(oData.dept_certificate_no) : {};
+
+					for (var key in o_dept_certificate_no) {
+						var $certificate_no = $form.findField(key);
+						$certificate_no.setValue(o_dept_certificate_no[key]);
+					}
+				}
+			}
+
 			if (action.type == "submit") {
 				$.send(ENV.getProcessUrl("bmo","@checkMigrate"),{},function(result) {
 					if (result.success == false) {
@@ -87,6 +104,19 @@ new Ext.form.Panel({
 		beforeaction:function(form,action) {
 			if (action.type == "submit") {
 				Ext.getCmp("ModuleConfigForm").getForm().findField("install_version").setValue("<?php echo $this->getModule()->getPackage()->version;?>");
+
+				var $form = Ext.getCmp("ModuleConfigForm").getForm();
+				if ($form.findField("use_department_certificate_no").checked) { // 운영기관별 이수번호 형식 체크시
+					var departments = Ext.getCmp("ModuleHybrideduConfigDepartmentCertificateNo").items.items;
+					var $dept_certificate_no = $form.findField("dept_certificate_no");
+					var o_dept_certificate_no = {};
+					
+					for (var key in departments) {
+						var $certificate_no = $form.findField(departments[key].name);
+						o_dept_certificate_no[departments[key].name] = departments[key].value;
+					}
+					$dept_certificate_no.setValue(JSON.stringify(o_dept_certificate_no));
+				}
 			}
 		}
 	}
